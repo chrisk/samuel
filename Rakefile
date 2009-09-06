@@ -6,14 +6,13 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "samuel"
     gem.summary = %Q{An automatic logger for HTTP requests in Ruby}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.description = %Q{An automatic logger for HTTP requests in Ruby. Adds Net::HTTP request logging to your Rails logs, and more.}
     gem.email = "chris@kampers.net"
     gem.homepage = "http://github.com/chrisk/samuel"
     gem.authors = ["Chris Kampmeier"]
     gem.rubyforge_project = "samuel"
     gem.add_development_dependency "thoughtbot-shoulda"
     gem.add_development_dependency "yard"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
   Jeweler::RubyforgeTasks.new do |rubyforge|
