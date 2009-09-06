@@ -1,18 +1,21 @@
-= samuel
+= Samuel
 
-Description goes here.
+Samuel is a gem for automatic logging of your Net::HTTP requests. It's named for
+the serial diarist Mr. Pepys, who was known to reliably record events both
+quotidian and remarkable.
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but
-   bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+Should a Great Plague, Fire, or Whale befall an important external web service
+you use, you'll be sure to have a tidy record of it.
 
-== Copyright
+== Usage in Rails:
 
-Copyright (c) 2009 Chris Kampmeier. See LICENSE for details.
+    # config/environment.rb
+    config.gem "samuel"
+
+That's about it! For now, Samuel automatically uses Rails' logger, and logs at
+the +INFO+ level using a Rails-like format. Failed requests log at the +WARN+
+level.
+
+== License
+
+Copyright 2009 Chris Kampmeier. See LICENSE for details.
