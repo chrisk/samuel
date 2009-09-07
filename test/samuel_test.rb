@@ -7,7 +7,7 @@ class SamuelTest < Test::Unit::TestCase
       setup_test_logger
       FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
       Benchmark.stubs(:realtime).yields.returns(0.053)
-      Net::HTTP.start("example.com") { |query| query.get("/test") }
+      open "http://example.com/test"
     end
 
     teardown { teardown_test_logger }
@@ -22,7 +22,7 @@ class SamuelTest < Test::Unit::TestCase
     context "on a non-standard port" do
       setup do
         FakeWeb.register_uri(:get, "http://example.com:8080/test", :status => [200, "OK"])
-        Net::HTTP.start("example.com", 8080) { |query| query.get("/test") }
+        open "http://example.com:8080/test"
       end
 
       should_log_including "GET http://example.com:8080/test"
@@ -31,8 +31,7 @@ class SamuelTest < Test::Unit::TestCase
     context "with SSL" do
       setup do
         FakeWeb.register_uri(:get, "https://example.com/test", :status => [200, "OK"])
-        http = Net::HTTP.new("example.com", 443); http.use_ssl = true
-        http.get("/test")
+        open "https://example.com/test"
       end
 
       should_log_including "HTTP request"
@@ -42,8 +41,7 @@ class SamuelTest < Test::Unit::TestCase
     context "with SSL on a non-standard port" do
       setup do
         FakeWeb.register_uri(:get, "https://example.com:80/test", :status => [200, "OK"])
-        http = Net::HTTP.new("example.com", 80); http.use_ssl = true
-        http.get("/test")
+        open "https://example.com:80/test"
       end
 
       should_log_including "HTTP request"

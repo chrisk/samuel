@@ -2,6 +2,7 @@ require 'rubygems'
 require 'test/unit'
 require 'shoulda'
 require 'mocha'
+require 'open-uri'
 require 'fakeweb'
 
 FakeWeb.allow_net_connect = false
