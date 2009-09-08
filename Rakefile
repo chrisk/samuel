@@ -36,6 +36,8 @@ begin
   Rcov::RcovTask.new do |test|
     test.libs << 'test'
     test.pattern = 'test/**/*_test.rb'
+    test.rcov_opts << "--sort coverage"
+    test.rcov_opts << "--exclude gems"
     test.verbose = false
   end
 rescue LoadError
