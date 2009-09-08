@@ -1,28 +1,23 @@
 module Samuel
   class Request
+    attr_accessor :response
 
-    def initialize(http, request, &block)
-      response, seconds = nil, 0
+    def initialize(http, request, proc)
+      @http, @request, @proc = http, request, proc
+      @response = nil
+    end
 
-      # If an exception is raised in this Benchmark block, it'll interrupt the
-      # benchmark. Instead, use an inner block to record it as the "response"
-      # for raising after the benchmark is done.
-      seconds = Benchmark.realtime do
-        begin; response = yield block; rescue Exception => response; end
-      end
-      raise response if response.is_a?(Exception)
-    ensure
-      milliseconds = (seconds * 1000).round
-      if http.use_ssl?
+    def log!
+      milliseconds = (@seconds * 1000).round
+      if @http.use_ssl?
         scheme = "https"
-        port   = (http.port == 443) ? "" : ":#{http.port}"
+        port   = (@http.port == 443) ? "" : ":#{@http.port}"
       else
         scheme = "http"
-        port   = (http.port == 80) ? "" : ":#{http.port}"
+        port   = (@http.port == 80) ? "" : ":#{@http.port}"
       end
-      uri = "#{scheme}://#{http.address}#{port}#{request.path}"
-
-      method = request.method.to_s.upcase
+      uri = "#{scheme}://#{@http.address}#{port}#{@request.path}"
+      method = @request.method.to_s.upcase
 
       if response.is_a?(Exception)
         response_info = response.class
@@ -38,8 +33,15 @@ module Samuel
 
       bold_blue_on, reset = "\e[4;34;1m", "\e[0m"
       Samuel.logger.add(level, "  #{bold_blue_on}HTTP request (#{milliseconds}ms) #{response_info}#{reset}  #{method} #{uri}")
+    end
 
-      response
+    def execute!
+      # If an exception is raised in the Benchmark block, it'll interrupt the
+      # benchmark. Instead, use an inner block to record it as the "response"
+      # for raising after the benchmark (and logging) is done.
+      @seconds = Benchmark.realtime do
+        begin; @response = @proc.call; rescue Exception => @response; end
+      end
     end
 
   end

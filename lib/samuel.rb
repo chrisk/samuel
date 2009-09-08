@@ -25,7 +25,10 @@ module Samuel
   end
 
   def log_request(http, request, &block)
-    Request.new(http, request, &block)
+    request = Request.new(http, request, block)
+    request.execute!
+    request.log!
+    request.response
   end
 
 end
