@@ -3,21 +3,22 @@ require 'test_helper'
 class SamuelTest < Test::Unit::TestCase
 
   context "making an HTTP request" do
-    setup do
-      setup_test_logger
-      FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
-      Benchmark.stubs(:realtime).yields.returns(0.053)
-      open "http://example.com/test"
-    end
-
+    setup    { setup_test_logger }
     teardown { teardown_test_logger }
 
-    should_log_lines     1
-    should_log_including "HTTP request"
-    should_log_including "(53ms)"
-    should_log_including "[200 OK]"
-    should_log_including "GET http://example.com/test"
+    context "to GET http://example.com/test, responding with a 200 in 53ms" do
+      setup do
+        FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
+        Benchmark.stubs(:realtime).yields.returns(0.053)
+        open "http://example.com/test"
+      end
 
+      should_log_lines     1
+      should_log_including "HTTP request"
+      should_log_including "(53ms)"
+      should_log_including "[200 OK]"
+      should_log_including "GET http://example.com/test"
+    end
 
     context "on a non-standard port" do
       setup do
