@@ -17,12 +17,11 @@ module Samuel
   def logger
     return @logger if !@logger.nil?
 
-    @logger = 
-      if defined?(RAILS_DEFAULT_LOGGER)
-        RAILS_DEFAULT_LOGGER
-      else
-        Logger.new(STDOUT)
-      end
+    if defined?(RAILS_DEFAULT_LOGGER)
+      @logger = RAILS_DEFAULT_LOGGER
+    else
+      @logger = Logger.new(STDOUT)
+    end
   end
 
   def log_request(http, request, &block)
