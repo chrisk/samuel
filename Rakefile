@@ -29,6 +29,7 @@ Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/*_test.rb'
   test.verbose = false
+  test.warning = true
 end
 
 begin
@@ -39,6 +40,7 @@ begin
     test.rcov_opts << "--sort coverage"
     test.rcov_opts << "--exclude gems"
     test.verbose = false
+    test.warning = true
   end
 rescue LoadError
   task :rcov do
