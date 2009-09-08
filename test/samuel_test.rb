@@ -48,6 +48,21 @@ class SamuelTest < Test::Unit::TestCase
       should_log_including "HTTP request"
       should_log_including "GET https://example.com:80/test"
     end
+
+    context "that raises" do
+      setup do
+        FakeWeb.register_uri(:get, "http://example.com/test", :exception => Errno::ECONNREFUSED)
+        begin
+          Net::HTTP.start("example.com") { |http| http.get("/test") }
+        rescue Errno::ECONNREFUSED
+        end
+      end
+
+      should_log_including "HTTP request"
+      should_log_including "GET http://example.com/test"
+      should_log_including "Errno::ECONNREFUSED"
+      should_log_including /\d+ms/
+    end
   end
 
 end
