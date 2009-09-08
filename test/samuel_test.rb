@@ -63,7 +63,7 @@ class SamuelTest < Test::Unit::TestCase
       should_log_including "HTTP request"
       should_log_including "GET http://example.com/test"
       should_log_including "Errno::ECONNREFUSED"
-      should_log_including /\d+ms/
+      should_log_including %r|\d+ms|
     end
   end
 
