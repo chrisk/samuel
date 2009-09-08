@@ -14,6 +14,7 @@ class SamuelTest < Test::Unit::TestCase
       end
 
       should_log_lines     1
+      should_eventually "log at the INFO level"
       should_log_including "HTTP request"
       should_log_including "(53ms)"
       should_log_including "[200 OK]"
@@ -58,11 +59,20 @@ class SamuelTest < Test::Unit::TestCase
         end
       end
 
+      should_eventually "log at the WARN level"
       should_log_including "HTTP request"
       should_log_including "GET http://example.com/test"
       should_log_including "Errno::ECONNREFUSED"
       should_log_including /\d+ms/
     end
+  end
+
+  context "that responds with a 500-level code" do
+    should_eventually "log at the WARN level"
+  end
+
+  context "that responds with a 400-level code" do
+    should_eventually "log at the WARN level"
   end
 
 end
