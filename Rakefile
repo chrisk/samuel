@@ -13,6 +13,8 @@ begin
     gem.rubyforge_project = "samuel"
     gem.add_development_dependency "thoughtbot-shoulda"
     gem.add_development_dependency "yard"
+    gem.add_development_dependency "mocha"
+    gem.add_development_dependency "fakeweb"
   end
   Jeweler::GemcutterTasks.new
   Jeweler::RubyforgeTasks.new do |rubyforge|
