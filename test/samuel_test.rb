@@ -56,15 +56,16 @@ class SamuelTest < Test::Unit::TestCase
         FakeWeb.register_uri(:get, "http://example.com/test", :exception => Errno::ECONNREFUSED)
         begin
           Net::HTTP.start("example.com") { |http| http.get("/test") }
-        rescue Errno::ECONNREFUSED
+        rescue Errno::ECONNREFUSED => @exception
         end
       end
 
-      should_log_at_level :warn
-      should_log_including "HTTP request"
-      should_log_including "GET http://example.com/test"
-      should_log_including "Errno::ECONNREFUSED"
-      should_log_including %r|\d+ms|
+      should_log_at_level    :warn
+      should_log_including   "HTTP request"
+      should_log_including   "GET http://example.com/test"
+      should_log_including   "Errno::ECONNREFUSED"
+      should_log_including   %r|\d+ms|
+      should_raise_exception Errno::ECONNREFUSED
     end
 
     context "that responds with a 500-level code" do

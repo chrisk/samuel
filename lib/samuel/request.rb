@@ -7,19 +7,16 @@ module Samuel
       @http, @request, @proc = http, request, proc
     end
 
-    def log!
-      Samuel.logger.add(log_level, log_message)
-    end
-
-    def execute!
+    def execute_and_log!
       # If an exception is raised in the Benchmark block, it'll interrupt the
       # benchmark. Instead, use an inner block to record it as the "response"
       # for raising after the benchmark (and logging) is done.
       @seconds = Benchmark.realtime do
         begin; @response = @proc.call; rescue Exception => @response; end
       end
+      Samuel.logger.add(log_level, log_message)
+      raise @response if @response.is_a?(Exception)
     end
-
 
     private
 

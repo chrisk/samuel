@@ -39,6 +39,12 @@ class Test::Unit::TestCase
     end
   end
 
+  def self.should_raise_exception(klass)
+    should "raise an #{klass} exception" do
+      assert @exception.is_a?(klass)
+    end
+  end
+
   def setup_test_logger
     FileUtils.rm_rf TEST_LOG_PATH
     FileUtils.touch TEST_LOG_PATH
