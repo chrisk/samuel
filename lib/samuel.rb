@@ -15,6 +15,7 @@ module Samuel
   end
 
   def logger
+    @logger = nil if !defined?(@logger)
     return @logger if !@logger.nil?
 
     if defined?(RAILS_DEFAULT_LOGGER)
