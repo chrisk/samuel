@@ -32,6 +32,13 @@ class Test::Unit::TestCase
     end
   end
 
+  def self.should_log_at_level(level)
+    level = level.to_s.upcase
+    should "log at the #{level} level" do
+      assert File.read(TEST_LOG_PATH).include?("  #{level} -- :")
+    end
+  end
+
   def setup_test_logger
     FileUtils.rm_rf TEST_LOG_PATH
     FileUtils.touch TEST_LOG_PATH
