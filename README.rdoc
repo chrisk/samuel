@@ -9,13 +9,22 @@ you use, you'll be sure to have a tidy record of it.
 
 == Usage in Rails:
 
-    # config/environment.rb
-    config.gem "samuel"
+  # config/environment.rb
+  config.gem "samuel"
 
 That's about it! For now, Samuel automatically uses Rails' logger, and logs at
-the +INFO+ level using a Rails-like format. Failed requests log at the +WARN+
-level.
+the +INFO+ level using an ActiveRecord-like format. Failed requests log at the
++WARN+ level.
+
+== Usage in general:
+
+When Rails isn't loaded, you'll have to manually configure logging, like this:
+
+  require 'samuel'
+  Samuel.logger = Logger.new('http_requests.log')
+
+If you don't assign a logger, Samuel will configure a default logger on +STDOUT+.
 
 == License
 
-Copyright 2009 Chris Kampmeier. See LICENSE for details.
+Copyright 2009 Chris Kampmeier. See +LICENSE+ for details.
