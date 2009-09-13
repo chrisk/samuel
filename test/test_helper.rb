@@ -27,7 +27,8 @@ class Test::Unit::TestCase
       if what.is_a?(Regexp)
         assert_match what, contents
       else
-        assert contents.include?(what)
+        assert contents.include?(what),
+               "Expected #{contents.inspect} to include #{what.inspect}"
       end
     end
   end
