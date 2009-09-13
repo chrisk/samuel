@@ -97,6 +97,29 @@ class RequestTest < Test::Unit::TestCase
 
       should_log_including "Example request"
     end
+
+    context "inside a configuration block with :filter_params" do
+      setup do
+        FakeWeb.register_uri(:get, "http://example.com/test?password=secret&username=chrisk",
+                             :status => [200, "OK"])
+        @uri = "http://example.com/test?password=secret&username=chrisk"
+      end
+
+      context "=> :password" do
+        setup { Samuel.with_config(:filtered_params => :password) { open @uri } }
+        should_log_including "http://example.com/test?password=[FILTERED]&username=chrisk"
+      end
+
+      context "=> :ass" do
+        setup { Samuel.with_config(:filtered_params => :ass) { open @uri } }
+        should_log_including "http://example.com/test?password=[FILTERED]&username=chrisk"
+      end
+
+      context "=> ['pass', 'name']" do
+        setup { Samuel.with_config(:filtered_params => %w(pass name)) { open @uri } }
+        should_log_including "http://example.com/test?password=[FILTERED]&username=[FILTERED]"
+      end
+    end
   end
 
 end

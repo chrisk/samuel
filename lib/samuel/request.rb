@@ -35,7 +35,21 @@ module Samuel
     end
 
     def uri
-      "#{scheme}://#{@http.address}#{port_if_not_default}#{@request.path}"
+      "#{scheme}://#{@http.address}#{port_if_not_default}#{filtered_path}"
+    end
+
+    def filtered_path
+      path_without_query, query = @request.path.split("?")
+      if query
+        patterns = [Samuel.config[:filtered_params]].flatten
+        patterns.map { |pattern|
+          pattern_for_regex = Regexp.escape(pattern.to_s)
+          [/([^&]*#{pattern_for_regex}[^&=]*)=(?:[^&]+)/, '\1=[FILTERED]']
+        }.each { |filter| query.gsub!(*filter) }
+        "#{path_without_query}?#{query}"
+      else
+        @request.path
+      end
     end
 
     def scheme
