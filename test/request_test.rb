@@ -96,6 +96,7 @@ class RequestTest < Test::Unit::TestCase
       end
 
       should_log_including "Example request"
+      should_have_config_afterwards_including :name => "HTTP"
     end
 
     context "inside a configuration block with :filter_params" do
@@ -120,6 +121,58 @@ class RequestTest < Test::Unit::TestCase
         should_log_including "http://example.com/test?password=[FILTERED]&username=[FILTERED]"
       end
     end
+
+    context "with a global config including :name => 'Example'" do
+      setup do
+        FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
+        Samuel.config[:name] = "Example"
+        open "http://example.com/test"
+      end
+
+      should_log_including "Example request"
+      should_have_config_afterwards_including :name => "Example"
+    end
+
+    context "with a global config including :name => 'Example' but inside config block that changes it to 'Example 2'" do
+      setup do
+        FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
+        Samuel.config[:name] = "Example"
+        Samuel.with_config(:name => "Example 2") { open "http://example.com/test" }
+      end
+
+      should_log_including "Example 2 request"
+      should_have_config_afterwards_including :name => "Example"
+    end
+
+    context "inside a config block of :name => 'Example 2' nested inside a config block of :name => 'Example'" do
+      setup do
+        FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
+        Samuel.with_config :name => "Example" do
+          Samuel.with_config :name => "Example 2" do
+            open "http://example.com/test"
+          end
+        end
+      end
+
+      should_log_including "Example 2 request"
+      should_have_config_afterwards_including :name => "HTTP"
+    end
+
+    context "wth a global config including :name => 'Example' but inside a config block of :name => 'Example 3' nested inside a config block of :name => 'Example 2'" do
+      setup do
+        FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
+        Samuel.config[:name] = "Example"
+        Samuel.with_config :name => "Example 2" do
+          Samuel.with_config :name => "Example 3" do
+            open "http://example.com/test"
+          end
+        end
+      end
+
+      should_log_including "Example 3 request"
+      should_have_config_afterwards_including :name => "Example"
+    end
+
   end
 
 end

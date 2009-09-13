@@ -46,6 +46,14 @@ class Test::Unit::TestCase
     end
   end
 
+  def self.should_have_config_afterwards_including(config)
+    config.each_pair do |key, value|
+      should "continue afterwards with Samuel.config[#{key.inspect}] set to #{value.inspect}" do
+        assert_equal value, Samuel.config[key]
+      end
+    end
+  end
+
   def setup_test_logger
     FileUtils.rm_rf TEST_LOG_PATH
     FileUtils.touch TEST_LOG_PATH
