@@ -4,7 +4,8 @@ class RequestTest < Test::Unit::TestCase
 
   context "making an HTTP request" do
     setup    { setup_test_logger
-               FakeWeb.clean_registry }
+               FakeWeb.clean_registry
+               Samuel.reset_config }
     teardown { teardown_test_logger }
 
     context "to GET http://example.com/test, responding with a 200 in 53ms" do

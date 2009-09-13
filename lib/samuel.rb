@@ -41,6 +41,10 @@ module Samuel
     @config = original_config
   end
 
+  def reset_config
+    @config = {:name => "HTTP", :filtered_params => []}
+  end
+
 end
 
-Samuel.config = {}
+Samuel.reset_config
