@@ -10,11 +10,7 @@ require "samuel/request"
 module Samuel
   extend self
 
-  attr_accessor :config
-
-  def logger=(new_logger)
-    @logger = new_logger
-  end
+  attr_writer :config, :logger
 
   def logger
     @logger = nil if !defined?(@logger)
@@ -27,6 +23,10 @@ module Samuel
     end
   end
 
+  def config
+    Thread.current[:__samuel_config] ? Thread.current[:__samuel_config] : @config
+  end
+
   def log_request(http, request, &block)
     request = Request.new(http, request, block)
     request.execute_and_log!
@@ -34,14 +34,16 @@ module Samuel
   end
 
   def with_config(options = {})
-    # TODO: this isn't thread-safe
-    original_config = @config.dup
-    @config.merge! options
+    original_config = config.dup
+    nested = !Thread.current[:__samuel_config].nil?
+
+    Thread.current[:__samuel_config] = original_config.merge(options)
     yield
-    @config = original_config
+    Thread.current[:__samuel_config] = nested ? original_config : nil
   end
 
   def reset_config
+    Thread.current[:__samuel_config] = nil
     @config = {:name => "HTTP", :filtered_params => []}
   end
 
