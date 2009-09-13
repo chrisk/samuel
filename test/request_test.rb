@@ -86,7 +86,7 @@ class RequestTest < Test::Unit::TestCase
       should_log_at_level :warn
     end
 
-    context "inside a configuration block" do
+    context "inside a configuration block with :name => 'Example'" do
       setup do
         FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
         Samuel.with_config :name => "Example" do

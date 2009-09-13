@@ -10,6 +10,8 @@ require "samuel/request"
 module Samuel
   extend self
 
+  attr_accessor :config
+
   def logger=(new_logger)
     @logger = new_logger
   end
@@ -31,4 +33,14 @@ module Samuel
     request.response
   end
 
+  def with_config(options = {})
+    # TODO: this isn't thread-safe
+    original_config = @config.dup
+    @config.merge! options
+    yield
+    @config = original_config
+  end
+
 end
+
+Samuel.config = {}
