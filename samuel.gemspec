@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{samuel}
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Chris Kampmeier"]
-  s.date = %q{2009-09-11}
+  s.date = %q{2009-09-13}
   s.description = %q{An automatic logger for HTTP requests in Ruby. Adds Net::HTTP request logging to your Rails logs, and more.}
   s.email = %q{chris@kampers.net}
   s.extra_rdoc_files = [
@@ -27,8 +27,10 @@ Gem::Specification.new do |s|
      "lib/samuel/net_http.rb",
      "lib/samuel/request.rb",
      "samuel.gemspec",
+     "test/request_test.rb",
      "test/samuel_test.rb",
-     "test/test_helper.rb"
+     "test/test_helper.rb",
+     "test/thread_test.rb"
   ]
   s.homepage = %q{http://github.com/chrisk/samuel}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -37,8 +39,10 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{An automatic logger for HTTP requests in Ruby}
   s.test_files = [
-    "test/samuel_test.rb",
-     "test/test_helper.rb"
+    "test/request_test.rb",
+     "test/samuel_test.rb",
+     "test/test_helper.rb",
+     "test/thread_test.rb"
   ]
 
   if s.respond_to? :specification_version then
