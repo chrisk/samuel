@@ -10,7 +10,7 @@ class ThreadTest < Test::Unit::TestCase
       threads = []
       5.times do |i|
         threads << Thread.new(i) do |n|
-          Samuel.with_config :name => "Example #{n}" do
+          Samuel.with_config :label => "Example #{n}" do
             Thread.pass
             open "http://example.com/#{n}"
           end

@@ -87,16 +87,16 @@ class RequestTest < Test::Unit::TestCase
       should_log_at_level :warn
     end
 
-    context "inside a configuration block with :name => 'Example'" do
+    context "inside a configuration block with :label => 'Example'" do
       setup do
         FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
-        Samuel.with_config :name => "Example" do
+        Samuel.with_config :label => "Example" do
           open "http://example.com/test"
         end
       end
 
       should_log_including "Example request"
-      should_have_config_afterwards_including :name => "HTTP"
+      should_have_config_afterwards_including :label => "HTTP"
     end
 
     context "inside a configuration block with :filter_params" do
@@ -122,55 +122,55 @@ class RequestTest < Test::Unit::TestCase
       end
     end
 
-    context "with a global config including :name => 'Example'" do
+    context "with a global config including :label => 'Example'" do
       setup do
         FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
-        Samuel.config[:name] = "Example"
+        Samuel.config[:label] = "Example"
         open "http://example.com/test"
       end
 
       should_log_including "Example request"
-      should_have_config_afterwards_including :name => "Example"
+      should_have_config_afterwards_including :label => "Example"
     end
 
-    context "with a global config including :name => 'Example' but inside config block that changes it to 'Example 2'" do
+    context "with a global config including :label => 'Example' but inside config block that changes it to 'Example 2'" do
       setup do
         FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
-        Samuel.config[:name] = "Example"
-        Samuel.with_config(:name => "Example 2") { open "http://example.com/test" }
+        Samuel.config[:label] = "Example"
+        Samuel.with_config(:label => "Example 2") { open "http://example.com/test" }
       end
 
       should_log_including "Example 2 request"
-      should_have_config_afterwards_including :name => "Example"
+      should_have_config_afterwards_including :label => "Example"
     end
 
-    context "inside a config block of :name => 'Example 2' nested inside a config block of :name => 'Example'" do
+    context "inside a config block of :label => 'Example 2' nested inside a config block of :label => 'Example'" do
       setup do
         FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
-        Samuel.with_config :name => "Example" do
-          Samuel.with_config :name => "Example 2" do
+        Samuel.with_config :label => "Example" do
+          Samuel.with_config :label => "Example 2" do
             open "http://example.com/test"
           end
         end
       end
 
       should_log_including "Example 2 request"
-      should_have_config_afterwards_including :name => "HTTP"
+      should_have_config_afterwards_including :label => "HTTP"
     end
 
-    context "wth a global config including :name => 'Example' but inside a config block of :name => 'Example 3' nested inside a config block of :name => 'Example 2'" do
+    context "wth a global config including :label => 'Example' but inside a config block of :label => 'Example 3' nested inside a config block of :label => 'Example 2'" do
       setup do
         FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
-        Samuel.config[:name] = "Example"
-        Samuel.with_config :name => "Example 2" do
-          Samuel.with_config :name => "Example 3" do
+        Samuel.config[:label] = "Example"
+        Samuel.with_config :label => "Example 2" do
+          Samuel.with_config :label => "Example 3" do
             open "http://example.com/test"
           end
         end
       end
 
       should_log_including "Example 3 request"
-      should_have_config_afterwards_including :name => "Example"
+      should_have_config_afterwards_including :label => "Example"
     end
 
   end

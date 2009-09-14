@@ -35,7 +35,7 @@ class SamuelTest < Test::Unit::TestCase
     should "reset the config to default vaules" do
       Samuel.config = {:foo => "bar"}
       Samuel.reset_config
-      assert_equal({:name => "HTTP", :filtered_params => []}, Samuel.config)
+      assert_equal({:label => "HTTP", :filtered_params => []}, Samuel.config)
     end
   end
 

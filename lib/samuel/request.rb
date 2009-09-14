@@ -25,8 +25,8 @@ module Samuel
       blue      = "\e[34m"
       underline = "\e[4m"
       reset     = "\e[0m"
-      name      = Samuel.config[:name]
-      "  #{bold}#{blue}#{underline}#{name} request (#{milliseconds}ms) " +
+      label     = Samuel.config[:label]
+      "  #{bold}#{blue}#{underline}#{label} request (#{milliseconds}ms) " +
       "#{response_summary}#{reset}  #{method} #{uri}"
     end
 

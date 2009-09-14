@@ -44,7 +44,7 @@ module Samuel
 
   def reset_config
     Thread.current[:__samuel_config] = nil
-    @config = {:name => "HTTP", :filtered_params => []}
+    @config = {:label => "HTTP", :filtered_params => []}
   end
 
 end
