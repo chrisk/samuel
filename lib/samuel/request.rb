@@ -25,7 +25,6 @@ module Samuel
       blue      = "\e[34m"
       underline = "\e[4m"
       reset     = "\e[0m"
-      label     = Samuel.config[:label]
       "  #{bold}#{blue}#{underline}#{label} request (#{milliseconds}ms) " +
       "#{response_summary}#{reset}  #{method} #{uri}"
     end
@@ -67,6 +66,13 @@ module Samuel
 
     def method
       @request.method.to_s.upcase
+    end
+
+    def label
+      return Samuel.config[:label] if Samuel.config[:label]
+
+      pair = Samuel.config[:labels].detect { |domain, label| @http.address.include?(domain) }
+      pair[1] if pair
     end
 
     def response_summary

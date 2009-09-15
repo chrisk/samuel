@@ -29,7 +29,7 @@ If you don't assign a logger, Samuel will configure a default logger on +STDOUT+
 There are two ways to specify configuration options for Samuel: global and
 inline. Global configs look like this:
 
-  Samuel.config[:label]           = "Twitter API"
+  Samuel.config[:labels]          = {"example.com" => "Example API"}
   Samuel.config[:filtered_params] = :password
 
 You should put global configuration somewhere early-on in your program. If
@@ -42,12 +42,20 @@ configuration for a set of HTTP requests:
     Net::HTTP.start("twitter.com") { |http| http.get("/help/test") }
   end
 
-Right now, there are two configuration changes you can make in either style:
+Right now, there are three configuration changes you can make in either style:
 
-* +:label+ - This is the very first part of each log entry, and it gets
-  <tt>"Request"</tt> appended to it. By default, it's <tt>"HTTP"</tt> -- but if
-  you want your log to say +Twitter API Request+ instead of the default +HTTP
-  Request+, set this to <tt>"Twitter API"</tt>.
+* +:labels+ - This is a hash with domain substrings as keys and log labels as
+  values. If a request domain includes one of the domain substrings, the
+  corresponding label will be used for the first part of that log entry. By
+  default this is set to <tt>\{"" => "HTTP"}</tt>, so that all requests are
+  labeled with <tt>"HTTP Request"</tt>.
+* +:label+ - As an alternative to the +:labels+ hash, this is simply a string.
+  If set, it takes precedence over any +:labels+ (by default, it's not set). It
+  gets <tt>"Request"</tt> appended to it as well -- so if you want your log to
+  always say +Twitter API Request+ instead of the default +HTTP Request+, you
+  can set this to <tt>"Twitter API"</tt>. I'd recommend using this setting
+  globally if you're only making requests to one service, or inline if you just
+  need to temporarily override the global +:labels+.
 * +:filtered_params+ - This works just like Rails's +filter_parameter_logging+
   method. Set it to a symbol, string, or array of them, and Samuel will filter
   the value of query parameters that have any of these patterns as a substring
