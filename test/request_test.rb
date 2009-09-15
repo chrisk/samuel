@@ -111,7 +111,7 @@ class RequestTest < Test::Unit::TestCase
         should_log_including "http://example.com/test?password=[FILTERED]&username=chrisk"
       end
 
-      context "=> :ass" do
+      context "=> :as" do
         setup { Samuel.with_config(:filtered_params => :ass) { open @uri } }
         should_log_including "http://example.com/test?password=[FILTERED]&username=chrisk"
       end
