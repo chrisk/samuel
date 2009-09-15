@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{samuel}
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Chris Kampmeier"]
-  s.date = %q{2009-09-13}
+  s.date = %q{2009-09-15}
   s.description = %q{An automatic logger for HTTP requests in Ruby. Adds Net::HTTP request logging to your Rails logs, and more.}
   s.email = %q{chris@kampers.net}
   s.extra_rdoc_files = [
