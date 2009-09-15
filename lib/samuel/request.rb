@@ -7,7 +7,7 @@ module Samuel
       @http, @request, @proc = http, request, proc
     end
 
-    def execute_and_log!
+    def perform_and_log!
       # If an exception is raised in the Benchmark block, it'll interrupt the
       # benchmark. Instead, use an inner block to record it as the "response"
       # for raising after the benchmark (and logging) is done.

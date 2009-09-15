@@ -29,7 +29,7 @@ module Samuel
 
   def log_request(http, request, &block)
     request = Request.new(http, request, block)
-    request.execute_and_log!
+    request.perform_and_log!
     request.response
   end
 
