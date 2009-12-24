@@ -10,6 +10,8 @@ require "samuel/request"
 module Samuel
   extend self
 
+  VERSION = "0.2.1"
+
   attr_writer :config, :logger
 
   def logger
