@@ -11,7 +11,7 @@ begin
     gem.homepage = "http://github.com/chrisk/samuel"
     gem.authors = ["Chris Kampmeier"]
     gem.rubyforge_project = "samuel"
-    gem.add_development_dependency "thoughtbot-shoulda"
+    gem.add_development_dependency "shoulda"
     gem.add_development_dependency "yard"
     gem.add_development_dependency "mocha"
     gem.add_development_dependency "fakeweb"
@@ -44,7 +44,7 @@ begin
   end
 rescue LoadError
   task :rcov do
-    abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
+    abort "RCov is not available. In order to run rcov, you must: sudo gem install rcov"
   end
 end
 
