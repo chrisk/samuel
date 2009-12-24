@@ -1,9 +1,12 @@
 require "logger"
 require "net/http"
 require "net/https"
+require "httpclient" # TODO handle when HTTPClient isn't available
 require "benchmark"
 
+
 require "samuel/net_http"
+require "samuel/http_client" # TODO handle when HTTPClient isn't available
 require "samuel/request"
 
 

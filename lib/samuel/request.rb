@@ -20,6 +20,17 @@ module Samuel
 
     private
 
+    def address
+      case @http
+      when Net::HTTP
+        @http.address
+      when HTTPClient
+        @request.header.request_uri.host
+      else
+        raise "Unhandled HTTP driver"
+      end
+    end
+
     def log_message
       bold      = "\e[1m"
       blue      = "\e[34m"
@@ -34,30 +45,58 @@ module Samuel
     end
 
     def uri
-      "#{scheme}://#{@http.address}#{port_if_not_default}#{filtered_path}"
+      "#{scheme}://#{address}#{port_if_not_default}#{path}#{'?' if query}#{filtered_query}"
     end
 
-    def filtered_path
-      path_without_query, query = @request.path.split("?")
-      if query
-        patterns = [Samuel.config[:filtered_params]].flatten
-        patterns.map { |pattern|
-          pattern_for_regex = Regexp.escape(pattern.to_s)
-          [/([^&]*#{pattern_for_regex}[^&=]*)=(?:[^&]+)/, '\1=[FILTERED]']
-        }.each { |filter| query.gsub!(*filter) }
-        "#{path_without_query}?#{query}"
-      else
-        @request.path
+    def path
+      case @request
+      when Net::HTTPRequest
+        @request.path.split("?")[0]
+      else HTTP::Message
+        @request.header.request_uri.path
+      end
+    end
+    
+    def query
+      case @request
+      when Net::HTTPRequest
+        @request.path.split("?")[1]
+      else HTTP::Message
+        @request.header.request_uri.query
       end
     end
 
+    def filtered_query
+      return "" if query.nil?
+      patterns = [Samuel.config[:filtered_params]].flatten
+      patterns.map { |pattern|
+        pattern_for_regex = Regexp.escape(pattern.to_s)
+        [/([^&]*#{pattern_for_regex}[^&=]*)=(?:[^&]+)/, '\1=[FILTERED]']
+      }.inject(query) { |filtered, filter| filtered.gsub(*filter) }
+    end
+
     def scheme
-      @http.use_ssl? ? "https" : "http"
+      if @http.is_a?(Net::HTTP)
+        @http.use_ssl? ? "https" : "http"
+      else
+        @request.header.request_uri.scheme
+      end
+    end
+
+    def ssl?
+      scheme == 'https'
+    end
+
+    def port
+      if @http.is_a?(Net::HTTP)
+        @http.port
+      else
+        @request.header.request_uri.port
+      end
     end
 
     def port_if_not_default
-      ssl, port = @http.use_ssl?, @http.port
-      if (!ssl && port == 80) || (ssl && port == 443)
+      if (!ssl? && port == 80) || (ssl? && port == 443)
         ""
       else
         ":#{port}"
@@ -65,21 +104,31 @@ module Samuel
     end
 
     def method
-      @request.method.to_s.upcase
+      case @request
+      when Net::HTTPRequest
+        @request.method.to_s.upcase
+      else HTTP::Message
+        @request.header.request_method
+      end
     end
 
     def label
       return Samuel.config[:label] if Samuel.config[:label]
 
-      pair = Samuel.config[:labels].detect { |domain, label| @http.address.include?(domain) }
+      pair = Samuel.config[:labels].detect { |domain, label| address.include?(domain) }
       pair[1] if pair
     end
 
     def response_summary
-      if response.is_a?(Exception)
+      case response
+      when Exception
         response.class
-      else
+      when Net::HTTPResponse
         "[#{response.code} #{response.message}]"
+      when HTTP::Message
+        "[#{response.header.status_code} #{response.header.reason_phrase}]"
+      else
+        raise "Unhandled HTTP driver"
       end
     end
 
