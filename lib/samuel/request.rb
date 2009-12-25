@@ -133,11 +133,13 @@ module Samuel
     end
 
     def log_level
-      error_classes = [Exception, Net::HTTPClientError, Net::HTTPServerError]
-      if error_classes.any? { |klass| response.is_a?(klass) }
-        level = Logger::WARN
+      case response
+      when Exception, Net::HTTPClientError, Net::HTTPServerError
+        Logger::WARN
+      when HTTP::Message
+        response.status.to_s =~ /^(4|5)/ ? Logger::WARN : Logger::INFO
       else
-        level = Logger::INFO
+        Logger::INFO
       end
     end
 
