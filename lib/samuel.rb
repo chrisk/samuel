@@ -5,9 +5,13 @@ require "httpclient" # TODO handle when HTTPClient isn't available
 require "benchmark"
 
 
-require "samuel/net_http"
-require "samuel/http_client" # TODO handle when HTTPClient isn't available
-require "samuel/request"
+require "samuel/log_entry"
+
+require "samuel/drivers/http_client_patch"
+require "samuel/drivers/http_client_log_entry"
+
+require "samuel/drivers/net_http_patch"
+require "samuel/drivers/net_http_log_entry"
 
 
 module Samuel
@@ -32,10 +36,15 @@ module Samuel
     Thread.current[:__samuel_config] ? Thread.current[:__samuel_config] : @config
   end
 
-  def log_request(http, request, &block)
-    request = Request.new(http, request, block)
-    request.perform_and_log!
-    request.response
+  def log_request(http_driver_object, request, &block)
+    log_entry_class = case http_driver_object
+      when Net::HTTP  then NetHttpLogEntry
+      when HTTPClient then HttpClientLogEntry
+      else raise NotImplementedError
+    end
+    log_entry = log_entry_class.new(http_driver_object, request, block)
+    log_entry.perform_and_log!
+    log_entry.response
   end
 
   def with_config(options = {})
