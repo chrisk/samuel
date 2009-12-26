@@ -52,8 +52,10 @@ module Samuel
       case @request
       when Net::HTTPRequest
         @request.path.split("?")[0]
-      else HTTP::Message
+      when HTTP::Message
         @request.header.request_uri.path
+      else
+        raise "Unhandled HTTP driver"
       end
     end
     
@@ -61,8 +63,10 @@ module Samuel
       case @request
       when Net::HTTPRequest
         @request.path.split("?")[1]
-      else HTTP::Message
+      when HTTP::Message
         @request.header.request_uri.query
+      else
+        raise "Unhandled HTTP driver"
       end
     end
 
@@ -107,8 +111,10 @@ module Samuel
       case @request
       when Net::HTTPRequest
         @request.method.to_s.upcase
-      else HTTP::Message
+      when HTTP::Message
         @request.header.request_method
+      else
+        raise "Unhandled HTTP driver"
       end
     end
 
