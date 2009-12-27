@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class HttpClientTest < Test::Unit::TestCase
+  # TODO: these are all real requests for now. One day FakeWeb will have
+  # complete HTTPClient support... :)
 
   context "making an HTTPClient request" do
     setup    { setup_test_logger
@@ -20,6 +22,25 @@ class HttpClientTest < Test::Unit::TestCase
       should_log_including "(53ms)"
       should_log_including "[200 OK]"
       should_log_including "GET http://example.com/"
+    end
+
+    context "using PUT" do
+      setup do
+        HTTPClient.put("http://example.com/books/1", "test=true")
+      end
+
+      should_log_including "PUT http://example.com/books/1"
+    end
+
+    context "using an asynchronous POST" do
+      setup do
+        body = "title=Infinite%20Jest"
+        client = HTTPClient.new
+        connection = client.post_async("http://example.com/books", body)
+        sleep 0.1 until connection.finished?
+      end
+
+      should_log_including "POST http://example.com/books"
     end
 
     context "with SSL" do
@@ -54,8 +75,6 @@ class HttpClientTest < Test::Unit::TestCase
 
       should_log_at_level :warn
     end
-
-
   end
-  
+
 end
