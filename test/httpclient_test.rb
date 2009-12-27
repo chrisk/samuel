@@ -12,7 +12,8 @@ class HttpClientTest < Test::Unit::TestCase
 
     context "to GET http://example.com/, responding with a 200 in 53ms" do
       setup do
-        Benchmark.stubs(:realtime).yields.returns(0.053)
+        now = Time.now
+        Time.stubs(:now).returns(now, now + 0.053)
         HTTPClient.get("http://example.com/")
       end
 

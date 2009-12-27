@@ -11,7 +11,8 @@ class RequestTest < Test::Unit::TestCase
     context "to GET http://example.com/test, responding with a 200 in 53ms" do
       setup do
         FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
-        Benchmark.stubs(:realtime).yields.returns(0.053)
+        now = Time.now
+        Time.stubs(:now).returns(now, now + 0.053)
         open "http://example.com/test"
       end
 

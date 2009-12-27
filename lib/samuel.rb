@@ -36,15 +36,24 @@ module Samuel
     Thread.current[:__samuel_config] ? Thread.current[:__samuel_config] : @config
   end
 
-  def log_request(http_driver_object, request, &block)
-    log_entry_class = case http_driver_object
+  def log_request_and_response(http, request, response, time_started, time_ended)
+    log_entry_class = case http
       when Net::HTTP  then NetHttpLogEntry
       when HTTPClient then HttpClientLogEntry
       else raise NotImplementedError
     end
-    log_entry = log_entry_class.new(http_driver_object, request, block)
-    log_entry.perform_and_log!
-    log_entry.response
+    log_entry = log_entry_class.new(http, request, response, time_started, time_ended)
+    log_entry.log!
+  end
+
+  def record_request(http, request, time_requested)
+    @requests ||= []
+    @requests.push({:request => request, :time_requested => time_requested})
+  end
+
+  def record_response(http, request, response, time_responded)
+    time_requested = @requests.detect { |r| r[:request] == request }[:time_requested]
+    Samuel.log_request_and_response(http, request, response, time_requested, time_responded)
   end
 
   def with_config(options = {})

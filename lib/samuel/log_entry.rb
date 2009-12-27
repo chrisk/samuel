@@ -1,21 +1,13 @@
 module Samuel
   class LogEntry
 
-    attr_reader :response
-
-    def initialize(http_driver_object, request, proc)
-      @http, @request, @proc = http_driver_object, request, proc
+    def initialize(http, request, response, time_requested, time_responded)
+      @http, @request, @response = http, request, response
+      @seconds = time_responded - time_requested
     end
 
-    def perform_and_log!
-      # If an exception is raised in the Benchmark block, it'll interrupt the
-      # benchmark. Instead, use an inner block to record it as the "response"
-      # for raising after the benchmark (and logging) is done.
-      @seconds = Benchmark.realtime do
-        begin; @response = @proc.call; rescue Exception => @response; end
-      end
+    def log!
       Samuel.logger.add(log_level, log_message)
-      raise @response if @response.is_a?(Exception)
     end
 
     def host;   raise NotImplementedError; end
