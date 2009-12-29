@@ -4,6 +4,7 @@ require 'shoulda'
 require 'mocha'
 require 'open-uri'
 require 'fakeweb'
+require 'webrick'
 
 FakeWeb.allow_net_connect = false
 
@@ -63,4 +64,26 @@ class Test::Unit::TestCase
   def teardown_test_logger
     FileUtils.rm_rf TEST_LOG_PATH
   end
+
+  def start_test_server
+    return if defined?(@@server)
+
+    @@server = WEBrick::HTTPServer.new(
+      :Port => 8000, :AccessLog => [],
+      :Logger => WEBrick::Log.new(nil, WEBrick::BasicLog::WARN)
+    )
+    @@server.mount "/", ResponseCodeServer
+    at_exit { @@server.shutdown }
+    Thread.new { @@server.start }
+  end
+end
+
+class ResponseCodeServer < WEBrick::HTTPServlet::AbstractServlet
+  def do_GET(request, response)
+    response_code = request.query_string.nil? ? 200 : request.query_string.to_i
+    response.status = response_code
+  end
+  alias_method :do_POST,   :do_GET
+  alias_method :do_PUT,    :do_GET
+  alias_method :do_DELETE, :do_GET
 end
