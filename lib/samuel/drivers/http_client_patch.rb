@@ -33,10 +33,7 @@ class LoggingFilter
   end
 
   def filter_response(request, response)
-    # TODO: this doesn't get called immediately for async requests, which
-    # throws off the benchmark. Probably need to benchmark at a lower level.
     Samuel.record_response(@http_client_instance, request, response, Time.now)
-
     nil # this returns command symbols like :retry, etc.
   end
 end
