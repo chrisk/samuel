@@ -69,6 +69,24 @@ class HttpClientTest < Test::Unit::TestCase
       should_raise_exception Errno::ECONNREFUSED
     end
 
+    context "using asynchronous GET that raises" do
+      setup do
+        begin
+          client = HTTPClient.new
+          connection = client.get_async("https://example.com/test")
+          sleep 0.1 until connection.finished?
+        rescue Errno::ECONNREFUSED => @exception
+        end
+      end
+
+      should_log_at_level    :warn
+      should_log_including   "HTTP request"
+      should_log_including   "GET https://example.com/test"
+      should_log_including   "Errno::ECONNREFUSED"
+      should_log_including   %r|\d+ms|
+      should_raise_exception Errno::ECONNREFUSED
+    end
+
     context "that responds with a 400-level code" do
       setup do
         HTTPClient.get("http://example.com/test")

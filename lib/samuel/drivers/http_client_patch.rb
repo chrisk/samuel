@@ -18,7 +18,16 @@ class HTTPClient
   alias_method :do_get_block_without_samuel, :do_get_block
   alias_method :do_get_block, :do_get_block_with_samuel
 
-  # TODO: record exceptions for async requests, too
+  def do_get_stream_with_samuel(req, proxy, conn)
+    begin
+      do_get_stream_without_samuel(req, proxy, conn)
+    rescue Exception => e
+      Samuel.record_response(self, req, e, Time.now)
+      raise
+    end
+  end
+  alias_method :do_get_stream_without_samuel, :do_get_stream
+  alias_method :do_get_stream, :do_get_stream_with_samuel
 
 end
 
