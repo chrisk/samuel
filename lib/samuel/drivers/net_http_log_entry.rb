@@ -29,7 +29,7 @@ module Samuel
       if @response.is_a?(Exception)
         @response.class
       else
-        "[#{@response.code} #{@response.message}]"
+        "[#{@response.code} #{@response.message.strip}]"
       end
     end
 
