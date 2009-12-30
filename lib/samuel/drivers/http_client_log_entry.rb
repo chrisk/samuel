@@ -33,12 +33,8 @@ module Samuel
       end
     end
 
-    def log_level
-      if @response.is_a?(Exception) || @response.status.to_s =~ /^(4|5)/
-        Logger::WARN
-      else
-        Logger::INFO
-      end
+    def error?
+      @response.is_a?(Exception) || @response.status.to_s =~ /^(4|5)/
     end
 
   end

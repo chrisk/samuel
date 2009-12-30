@@ -45,6 +45,10 @@ module Samuel
 
 
     private
+ 
+    def log_level
+      error? ? Logger::WARN : Logger::INFO
+    end
 
     def ssl?
       scheme == 'https'

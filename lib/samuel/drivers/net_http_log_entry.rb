@@ -33,13 +33,9 @@ module Samuel
       end
     end
 
-    def log_level
-      case @response
-      when Exception, Net::HTTPClientError, Net::HTTPServerError
-        Logger::WARN
-      else
-        Logger::INFO
-      end
+    def error?
+      error_classes = [Exception, Net::HTTPClientError, Net::HTTPServerError]
+      error_classes.any? { |c| @response.is_a?(c) }
     end
 
   end
