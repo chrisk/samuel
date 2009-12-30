@@ -3,7 +3,7 @@ require "net/http"
 require "net/https"
 require "httpclient" # TODO handle when HTTPClient isn't available
 require "benchmark"
-
+require "forwardable"
 
 require "samuel/log_entry"
 

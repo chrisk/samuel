@@ -1,25 +1,10 @@
 module Samuel
   class HttpClientLogEntry < LogEntry
 
-    def host
-      @request.header.request_uri.host
-    end
+    extend Forwardable
 
-    def path
-      @request.header.request_uri.path
-    end
-
-    def query
-      @request.header.request_uri.query
-    end
-
-    def scheme
-      @request.header.request_uri.scheme
-    end
-
-    def port
-      @request.header.request_uri.port
-    end
+    def_delegators :"@request.header.request_uri",
+                   :host, :path, :query, :scheme, :port
 
     def method
       @request.header.request_method
