@@ -11,6 +11,8 @@ module Samuel
     end
 
 
+    protected
+
     def log_message
       bold      = "\e[1m"
       blue      = "\e[34m"
@@ -43,8 +45,6 @@ module Samuel
       end
     end
 
-    private
- 
     def log_level
       error? ? Logger::WARN : Logger::INFO
     end
