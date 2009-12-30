@@ -4,11 +4,9 @@ require 'mocha'
 require 'open-uri'
 require 'fakeweb'
 
-FakeWeb.allow_net_connect = false
-
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'samuel'
+
+FakeWeb.allow_net_connect = false
 
 class Test::Unit::TestCase
   TEST_LOG_PATH = File.join(File.dirname(__FILE__), 'test.log')
