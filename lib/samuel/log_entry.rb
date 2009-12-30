@@ -10,14 +10,6 @@ module Samuel
       Samuel.logger.add(log_level, log_message)
     end
 
-    def host;   raise NotImplementedError; end
-    def path;   raise NotImplementedError; end
-    def query;  raise NotImplementedError; end
-    def scheme; raise NotImplementedError; end
-    def port;   raise NotImplementedError; end
-    def method; raise NotImplementedError; end
-    def response_summary; raise NotImplementedError; end
-    def log_level; raise NotImplementedError; end
 
     def log_message
       bold      = "\e[1m"
