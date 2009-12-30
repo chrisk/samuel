@@ -43,6 +43,13 @@ module Samuel
       pair[1] if pair
     end
 
+    def response_summary
+      if @response.is_a?(Exception)
+        @response.class
+      else
+        "[#{status_code} #{status_message}]"
+      end
+    end
 
     private
  

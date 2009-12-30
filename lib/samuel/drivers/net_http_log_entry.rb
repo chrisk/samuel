@@ -25,12 +25,12 @@ module Samuel
       @request.method.to_s.upcase
     end
 
-    def response_summary
-      if @response.is_a?(Exception)
-        @response.class
-      else
-        "[#{@response.code} #{@response.message.strip}]"
-      end
+    def status_code
+      @response.code
+    end
+
+    def status_message
+      @response.message.strip
     end
 
     def error?

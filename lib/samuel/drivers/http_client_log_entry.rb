@@ -25,12 +25,12 @@ module Samuel
       @request.header.request_method
     end
 
-    def response_summary
-      if @response.is_a?(Exception)
-        @response.class
-      else
-        "[#{@response.header.status_code} #{@response.header.reason_phrase.strip}]"
-      end
+    def status_code
+      @response.status
+    end
+
+    def status_message
+      @response.header.reason_phrase.strip
     end
 
     def error?
