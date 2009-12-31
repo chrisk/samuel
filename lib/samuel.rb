@@ -1,16 +1,7 @@
 require "logger"
-require "net/http"
-require "net/https"
-require "httpclient" # TODO handle when HTTPClient isn't available
 require "forwardable"
 
 require "samuel/log_entry"
-
-require "samuel/drivers/http_client_patch"
-require "samuel/drivers/http_client_log_entry"
-
-require "samuel/drivers/net_http_patch"
-require "samuel/drivers/net_http_log_entry"
 
 
 module Samuel
@@ -36,9 +27,9 @@ module Samuel
   end
 
   def log_request_and_response(http, request, response, time_started, time_ended)
-    log_entry_class = case http
-      when Net::HTTP  then NetHttpLogEntry
-      when HTTPClient then HttpClientLogEntry
+    log_entry_class = case http.class.to_s
+      when "Net::HTTP"  then NetHttpLogEntry
+      when "HTTPClient" then HttpClientLogEntry
       else raise NotImplementedError
     end
     log_entry = log_entry_class.new(http, request, response, time_started, time_ended)
@@ -69,6 +60,30 @@ module Samuel
     @config = {:label => nil, :labels => {"" => "HTTP"}, :filtered_params => []}
   end
 
+  def load_drivers
+    driver_loaded = false
+    # TODO: dynamic requires are bad, put all extension code in modules and
+    # include/extend as necessary here
+
+    if defined?(Net::HTTP)
+      require "samuel/drivers/net_http_patch"
+      require "samuel/drivers/net_http_log_entry"
+      driver_loaded = true
+    end
+
+    if defined?(HTTPClient)
+      require "samuel/drivers/http_client_patch"
+      require "samuel/drivers/http_client_log_entry"
+      driver_loaded = true
+    end
+
+    if !driver_loaded
+      require 'net/http'
+      load_drivers
+    end
+  end
+
 end
 
 Samuel.reset_config
+Samuel.load_drivers

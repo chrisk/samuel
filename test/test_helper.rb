@@ -1,6 +1,11 @@
 require 'rubygems'
+
 require 'shoulda'
 require 'mocha'
+
+require 'net/http'
+require 'httpclient'
+
 require 'open-uri'
 require 'fakeweb'
 require 'webrick'
@@ -50,6 +55,12 @@ class Test::Unit::TestCase
         assert_equal value, Samuel.config[key]
       end
     end
+  end
+
+  # The path to the current ruby interpreter. Adapted from Rake's FileUtils.
+  def ruby_path
+    ext = ((RbConfig::CONFIG['ruby_install_name'] =~ /\.(com|cmd|exe|bat|rb|sh)$/) ? "" : RbConfig::CONFIG['EXEEXT'])
+    File.join(RbConfig::CONFIG['bindir'], RbConfig::CONFIG['ruby_install_name'] + ext).sub(/.*\s.*/m, '"\&"')
   end
 
   def setup_test_logger
