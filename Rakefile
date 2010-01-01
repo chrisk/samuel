@@ -18,7 +18,7 @@ begin
     gem.add_development_dependency "fakeweb"
   end
 rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
+  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
 require 'rake/testtask'
@@ -41,7 +41,7 @@ begin
   end
 rescue LoadError
   task :rcov do
-    abort "RCov is not available. In order to run rcov, you must: sudo gem install rcov"
+    abort "RCov is not available. In order to run rcov, you must: gem install rcov"
   end
 end
 
@@ -54,6 +54,6 @@ begin
   YARD::Rake::YardocTask.new
 rescue LoadError
   task :yardoc do
-    abort "YARD is not available. In order to run yardoc, you must: sudo gem install yard"
+    abort "YARD is not available. In order to run yardoc, you must: gem install yard"
   end
 end
