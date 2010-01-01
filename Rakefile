@@ -13,7 +13,6 @@ begin
     gem.authors = ["Chris Kampmeier"]
     gem.rubyforge_project = "samuel"
     gem.add_development_dependency "shoulda"
-    gem.add_development_dependency "yard"
     gem.add_development_dependency "mocha"
     gem.add_development_dependency "fakeweb"
   end
