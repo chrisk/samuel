@@ -4,7 +4,8 @@ require "forwardable"
 require "samuel/log_entry"
 require "samuel/drivers/http_client_log_entry"
 require "samuel/drivers/net_http_log_entry"
-
+require "samuel/drivers/http_client_patch"
+require "samuel/drivers/net_http_patch"
 
 module Samuel
   extend self
@@ -64,16 +65,14 @@ module Samuel
 
   def load_drivers
     driver_loaded = false
-    # TODO: dynamic requires are bad, put all extension code in modules and
-    # include/extend as necessary here
 
     if defined?(Net::HTTP)
-      require "samuel/drivers/net_http_patch"
+      Net::HTTP.send(:include, NetHTTPPatch)
       driver_loaded = true
     end
 
     if defined?(HTTPClient)
-      require "samuel/drivers/http_client_patch"
+      HTTPClient.send(:include, HTTPClientPatch)
       driver_loaded = true
     end
 

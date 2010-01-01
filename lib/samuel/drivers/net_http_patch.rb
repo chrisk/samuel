@@ -1,4 +1,11 @@
-class Net::HTTP
+module NetHTTPPatch
+  def self.included(klass)
+    methods_to_wrap = %w(request connect)
+    methods_to_wrap.each do |method|
+      klass.send(:alias_method, "#{method}_without_samuel", method)
+      klass.send(:alias_method, method, "#{method}_with_samuel")
+    end
+  end
 
   def request_with_samuel(request, body = nil, &block)
     Samuel.record_request(self, request, Time.now)
@@ -15,9 +22,6 @@ class Net::HTTP
     raise response if exception_raised
     response
   end
-  alias_method :request_without_samuel, :request
-  alias_method :request, :request_with_samuel
-
 
   def connect_with_samuel
     connect_without_samuel
@@ -29,7 +33,4 @@ class Net::HTTP
     Samuel.record_response(self, fake_request, response, Time.now)
     raise
   end
-  alias_method :connect_without_samuel, :connect
-  alias_method :connect, :connect_with_samuel
-
 end
