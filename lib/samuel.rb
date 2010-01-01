@@ -1,11 +1,12 @@
 require "logger"
 require "forwardable"
 
-require "samuel/log_entry"
-require "samuel/drivers/http_client_log_entry"
-require "samuel/drivers/net_http_log_entry"
-require "samuel/drivers/http_client_patch"
-require "samuel/drivers/net_http_patch"
+require "samuel/driver_patches/http_client"
+require "samuel/driver_patches/net_http"
+require "samuel/log_entries/base"
+require "samuel/log_entries/http_client"
+require "samuel/log_entries/net_http"
+
 
 module Samuel
   extend self
@@ -31,8 +32,8 @@ module Samuel
 
   def log_request_and_response(http, request, response, time_started, time_ended)
     log_entry_class = case http.class.to_s
-      when "Net::HTTP"  then NetHttpLogEntry
-      when "HTTPClient" then HttpClientLogEntry
+      when "Net::HTTP"  then LogEntries::NetHttp
+      when "HTTPClient" then LogEntries::HttpClient
       else raise NotImplementedError
     end
     log_entry = log_entry_class.new(http, request, response, time_started, time_ended)
@@ -67,12 +68,12 @@ module Samuel
     driver_loaded = false
 
     if defined?(Net::HTTP)
-      Net::HTTP.send(:include, NetHTTPPatch)
+      Net::HTTP.send(:include, DriverPatches::NetHTTP)
       driver_loaded = true
     end
 
     if defined?(HTTPClient)
-      HTTPClient.send(:include, HTTPClientPatch)
+      HTTPClient.send(:include, DriverPatches::HTTPClient)
       driver_loaded = true
     end
 
