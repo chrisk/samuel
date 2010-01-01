@@ -51,6 +51,7 @@ module Samuel
 
   def record_response(http, request, response, time_responded)
     time_requested = @requests.detect { |r| r[:request] == request }[:time_requested]
+    @requests.reject! { |r| r[:request] == request }
     Samuel.log_request_and_response(http, request, response, time_requested, time_responded)
   end
 
