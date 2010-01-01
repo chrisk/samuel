@@ -1,5 +1,5 @@
 module Samuel
-  module Recorder
+  module Diary
     extend self
 
     def record_request(http, request, time_requested)

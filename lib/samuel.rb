@@ -2,7 +2,7 @@ require "logger"
 require "forwardable"
 
 require "samuel/loader"
-require "samuel/recorder"
+require "samuel/diary"
 require "samuel/driver_patches/http_client"
 require "samuel/driver_patches/net_http"
 require "samuel/log_entries/base"
