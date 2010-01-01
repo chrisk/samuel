@@ -1,8 +1,14 @@
 require 'rubygems'
+
 require 'shoulda'
 require 'mocha'
+
+require 'net/http'
+require 'httpclient'
+
 require 'open-uri'
 require 'fakeweb'
+require 'webrick'
 
 require 'samuel'
 
@@ -51,6 +57,12 @@ class Test::Unit::TestCase
     end
   end
 
+  # The path to the current ruby interpreter. Adapted from Rake's FileUtils.
+  def ruby_path
+    ext = ((RbConfig::CONFIG['ruby_install_name'] =~ /\.(com|cmd|exe|bat|rb|sh)$/) ? "" : RbConfig::CONFIG['EXEEXT'])
+    File.join(RbConfig::CONFIG['bindir'], RbConfig::CONFIG['ruby_install_name'] + ext).sub(/.*\s.*/m, '"\&"')
+  end
+
   def setup_test_logger
     FileUtils.rm_rf TEST_LOG_PATH
     FileUtils.touch TEST_LOG_PATH
@@ -60,4 +72,26 @@ class Test::Unit::TestCase
   def teardown_test_logger
     FileUtils.rm_rf TEST_LOG_PATH
   end
+
+  def start_test_server
+    return if defined?(@@server)
+
+    @@server = WEBrick::HTTPServer.new(
+      :Port => 8000, :AccessLog => [],
+      :Logger => WEBrick::Log.new(nil, WEBrick::BasicLog::WARN)
+    )
+    @@server.mount "/", ResponseCodeServer
+    at_exit { @@server.shutdown }
+    Thread.new { @@server.start }
+  end
+end
+
+class ResponseCodeServer < WEBrick::HTTPServlet::AbstractServlet
+  def do_GET(request, response)
+    response_code = request.query_string.nil? ? 200 : request.query_string.to_i
+    response.status = response_code
+  end
+  alias_method :do_POST,   :do_GET
+  alias_method :do_PUT,    :do_GET
+  alias_method :do_DELETE, :do_GET
 end

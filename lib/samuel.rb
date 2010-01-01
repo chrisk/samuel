@@ -1,10 +1,13 @@
 require "logger"
-require "net/http"
-require "net/https"
-require "benchmark"
+require "forwardable"
 
-require "samuel/net_http"
-require "samuel/request"
+require "samuel/loader"
+require "samuel/diary"
+require "samuel/driver_patches/http_client"
+require "samuel/driver_patches/net_http"
+require "samuel/log_entries/base"
+require "samuel/log_entries/http_client"
+require "samuel/log_entries/net_http"
 
 
 module Samuel
@@ -12,7 +15,7 @@ module Samuel
 
   VERSION = "0.2.1"
 
-  attr_writer :config, :logger
+  attr_writer :logger, :config
 
   def logger
     @logger = nil if !defined?(@logger)
@@ -29,12 +32,6 @@ module Samuel
     Thread.current[:__samuel_config] ? Thread.current[:__samuel_config] : @config
   end
 
-  def log_request(http, request, &block)
-    request = Request.new(http, request, block)
-    request.perform_and_log!
-    request.response
-  end
-
   def with_config(options = {})
     original_config = config.dup
     nested = !Thread.current[:__samuel_config].nil?
@@ -48,7 +45,8 @@ module Samuel
     Thread.current[:__samuel_config] = nil
     @config = {:label => nil, :labels => {"" => "HTTP"}, :filtered_params => []}
   end
-
 end
 
+
 Samuel.reset_config
+Samuel::Loader.apply_driver_patches

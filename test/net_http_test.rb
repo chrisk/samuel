@@ -11,7 +11,8 @@ class RequestTest < Test::Unit::TestCase
     context "to GET http://example.com/test, responding with a 200 in 53ms" do
       setup do
         FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
-        Benchmark.stubs(:realtime).yields.returns(0.053)
+        now = Time.now
+        Time.stubs(:now).returns(now, now + 0.053)
         open "http://example.com/test"
       end
 
@@ -57,7 +58,7 @@ class RequestTest < Test::Unit::TestCase
         FakeWeb.register_uri(:get, "http://example.com/test", :exception => Errno::ECONNREFUSED)
         begin
           Net::HTTP.start("example.com") { |http| http.get("/test") }
-        rescue Errno::ECONNREFUSED => @exception
+        rescue Exception => @exception
         end
       end
 
@@ -67,6 +68,32 @@ class RequestTest < Test::Unit::TestCase
       should_log_including   "Errno::ECONNREFUSED"
       should_log_including   %r|\d+ms|
       should_raise_exception Errno::ECONNREFUSED
+    end
+
+    context "that raises a SocketError when connecting" do
+      setup do
+        FakeWeb.allow_net_connect = true
+        begin
+          http = Net::HTTP.new("example.com")
+          # This is an implementation-dependent hack; it would be more correct
+          # to stub out TCPSocket.open, but I can't get Mocha to make it raise
+          # correctly. Maybe related to TCPSocket being native code?
+          http.stubs(:connect_without_samuel).raises(SocketError)
+          http.start { |h| h.get("/test") }
+        rescue Exception => @exception
+        end
+      end
+
+      teardown do
+        FakeWeb.allow_net_connect = false
+      end
+
+      should_log_at_level    :warn
+      should_log_including   "HTTP request"
+      should_log_including   "CONNECT http://example.com"
+      should_log_including   "SocketError"
+      should_log_including   %r|\d+ms|
+      should_raise_exception SocketError
     end
 
     context "that responds with a 500-level code" do
