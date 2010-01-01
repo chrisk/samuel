@@ -1,11 +1,14 @@
 = Samuel
 
-Samuel is a gem for automatic logging of your Net::HTTP requests. It's named for
+Samuel is a gem for automatic logging of your HTTP requests. It's named for
 the serial diarist Mr. Pepys, who was known to reliably record events both
 quotidian and remarkable.
 
 Should a Great Plague, Fire, or Whale befall an important external web service
 you use, you'll be sure to have a tidy record of it.
+
+It supports both Net::HTTP and HTTPClient (formerly HTTPAccess2),
+automatically loading the correct logger for the HTTP client you're using.
 
 == Usage:
 
@@ -23,6 +26,14 @@ For non-Rails projects, you'll have to manually configure logging, like this:
   Samuel.logger = Logger.new('http_requests.log')
 
 If you don't assign a logger, Samuel will configure a default logger on +STDOUT+.
+
+== HTTP Clients
+
+When you load Samuel, it automatically detects which HTTP clients you've
+loaded, then patches them to add logging. If no HTTP drivers are loaded when
+you load Samuel, it will automatically load Net::HTTP for you. (So, if you're
+using HTTPClient or a library based on it, make sure to require it before you
+require Samuel.)
 
 == Configuration
 
