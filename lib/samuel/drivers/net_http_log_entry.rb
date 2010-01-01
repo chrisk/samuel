@@ -34,8 +34,9 @@ module Samuel
     end
 
     def error?
-      error_classes = [Exception, Net::HTTPClientError, Net::HTTPServerError]
-      error_classes.any? { |c| @response.is_a?(c) }
+      error_classes = %w(Exception Net::HTTPClientError Net::HTTPServerError)
+      response_ancestors = @response.class.ancestors.map { |a| a.to_s }
+      (error_classes & response_ancestors).any?
     end
 
   end
