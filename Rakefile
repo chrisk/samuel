@@ -14,6 +14,7 @@ begin
     gem.rubyforge_project = "samuel"
     gem.add_development_dependency "shoulda"
     gem.add_development_dependency "mocha"
+    gem.add_development_dependency "httpclient"
     gem.add_development_dependency "fakeweb"
   end
 rescue LoadError
