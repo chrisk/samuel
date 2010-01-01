@@ -2,6 +2,8 @@ require "logger"
 require "forwardable"
 
 require "samuel/log_entry"
+require "samuel/drivers/http_client_log_entry"
+require "samuel/drivers/net_http_log_entry"
 
 
 module Samuel
@@ -67,13 +69,11 @@ module Samuel
 
     if defined?(Net::HTTP)
       require "samuel/drivers/net_http_patch"
-      require "samuel/drivers/net_http_log_entry"
       driver_loaded = true
     end
 
     if defined?(HTTPClient)
       require "samuel/drivers/http_client_patch"
-      require "samuel/drivers/http_client_log_entry"
       driver_loaded = true
     end
 
