@@ -7,7 +7,7 @@ begin
     gem.name = "samuel"
     gem.version = "0.2.1"
     gem.summary = %Q{An automatic logger for HTTP requests in Ruby}
-    gem.description = %Q{An automatic logger for HTTP requests in Ruby. Adds Net::HTTP request logging to your Rails logs, and more.}
+    gem.description = %Q{An automatic logger for HTTP requests in Ruby, supporting the Net::HTTP and HTTPClient client libraries.}
     gem.email = "chris@kampers.net"
     gem.homepage = "http://github.com/chrisk/samuel"
     gem.authors = ["Chris Kampmeier"]
