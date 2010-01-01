@@ -2,7 +2,7 @@ module Samuel
   module Loader
     extend self
 
-    def load_drivers
+    def apply_driver_patches
       loaded = { :net_http    => defined?(Net::HTTP),
                  :http_client => defined?(HTTPClient) }
 
@@ -11,7 +11,7 @@ module Samuel
 
       if loaded.values.none?
         require 'net/http'
-        load_drivers
+        apply_driver_patches
       end
     end
 

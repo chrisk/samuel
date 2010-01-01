@@ -49,4 +49,4 @@ end
 
 
 Samuel.reset_config
-Samuel::Loader.load_drivers
+Samuel::Loader.apply_driver_patches
