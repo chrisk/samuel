@@ -19,7 +19,7 @@ module Samuel
         begin
           do_get_block_without_samuel(req, proxy, conn, &block)
         rescue Exception => e
-          Samuel.record_response(self, req, e, Time.now)
+          Samuel::Recorder.record_response(self, req, e, Time.now)
           raise
         end
       end
@@ -28,7 +28,7 @@ module Samuel
         begin
           do_get_stream_without_samuel(req, proxy, conn)
         rescue Exception => e
-          Samuel.record_response(self, req, e, Time.now)
+          Samuel::Recorder.record_response(self, req, e, Time.now)
           raise
         end
       end
@@ -39,11 +39,11 @@ module Samuel
         end
 
         def filter_request(request)
-          Samuel.record_request(@http_client_instance, request, Time.now)
+          Samuel::Recorder.record_request(@http_client_instance, request, Time.now)
         end
 
         def filter_response(request, response)
-          Samuel.record_response(@http_client_instance, request, response, Time.now)
+          Samuel::Recorder.record_response(@http_client_instance, request, response, Time.now)
           nil # this returns command symbols like :retry, etc.
         end
       end
