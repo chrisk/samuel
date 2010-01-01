@@ -47,7 +47,7 @@ Right now, there are three configuration changes you can make in either style:
 * +:labels+ - This is a hash with domain substrings as keys and log labels as
   values. If a request domain includes one of the domain substrings, the
   corresponding label will be used for the first part of that log entry. By
-  default this is set to <tt>\{"" => "HTTP"}</tt>, so that all requests are
+  default this is set to <tt>{"" => "HTTP"}</tt>, so that all requests are
   labeled with <tt>"HTTP Request"</tt>.
 * +:label+ - As an alternative to the +:labels+ hash, this is simply a string.
   If set, it takes precedence over any +:labels+ (by default, it's not set). It
