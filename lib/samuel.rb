@@ -65,19 +65,13 @@ module Samuel
   end
 
   def load_drivers
-    driver_loaded = false
+    loaded = { :net_http    => defined?(Net::HTTP),
+               :http_client => defined?(HTTPClient) }
 
-    if defined?(Net::HTTP)
-      Net::HTTP.send(:include, DriverPatches::NetHTTP)
-      driver_loaded = true
-    end
+    Net::HTTP.send(:include, DriverPatches::NetHTTP) if loaded[:net_http]
+    HTTPClient.send(:include, DriverPatches::HTTPClient) if loaded[:http_client]
 
-    if defined?(HTTPClient)
-      HTTPClient.send(:include, DriverPatches::HTTPClient)
-      driver_loaded = true
-    end
-
-    if !driver_loaded
+    if loaded.values.none?
       require 'net/http'
       load_drivers
     end
