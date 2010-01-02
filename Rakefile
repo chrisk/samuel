@@ -5,7 +5,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "samuel"
-    gem.version = "0.3.0"
+    gem.version = "0.3.1"
     gem.summary = %Q{An automatic logger for HTTP requests in Ruby}
     gem.description = %Q{An automatic logger for HTTP requests in Ruby, supporting the Net::HTTP and HTTPClient client libraries.}
     gem.email = "chris@kampers.net"

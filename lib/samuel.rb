@@ -13,7 +13,7 @@ require "samuel/log_entries/net_http"
 module Samuel
   extend self
 
-  VERSION = "0.3.0"
+  VERSION = "0.3.1"
 
   attr_writer :logger, :config
 
