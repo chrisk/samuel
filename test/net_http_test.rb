@@ -123,8 +123,7 @@ class RequestTest < Test::Unit::TestCase
       end
 
       should_log_including "Example request"
-      should_have_config_afterwards_including :labels => {"" => "HTTP"},
-                                              :label  => nil
+      should_have_config_afterwards_including :labels => {}, :label => nil
     end
 
     context "inside a configuration block with :filter_params" do
@@ -158,8 +157,7 @@ class RequestTest < Test::Unit::TestCase
       end
 
       should_log_including "Example request"
-      should_have_config_afterwards_including :labels => {"" => "HTTP"},
-                                              :label  => "Example"
+      should_have_config_afterwards_including :labels => {}, :label => "Example"
     end
 
     context "with a global config including :label => 'Example' but inside config block that changes it to 'Example 2'" do
@@ -170,8 +168,7 @@ class RequestTest < Test::Unit::TestCase
       end
 
       should_log_including "Example 2 request"
-      should_have_config_afterwards_including :labels => {"" => "HTTP"},
-                                              :label  => "Example"
+      should_have_config_afterwards_including :labels => {}, :label => "Example"
     end
 
     context "inside a config block of :label => 'Example 2' nested inside a config block of :label => 'Example'" do
@@ -185,8 +182,7 @@ class RequestTest < Test::Unit::TestCase
       end
 
       should_log_including "Example 2 request"
-      should_have_config_afterwards_including :labels => {"" => "HTTP"},
-                                              :label => nil
+      should_have_config_afterwards_including :labels => {}, :label => nil
     end
 
     context "wth a global config including :labels => {'example.com' => 'Example'} but inside a config block of :label => 'Example 3' nested inside a config block of :label => 'Example 2'" do
