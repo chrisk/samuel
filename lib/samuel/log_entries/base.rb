@@ -34,8 +34,10 @@ module Samuel
       def label
         return Samuel.config[:label] if Samuel.config[:label]
 
-        pair = Samuel.config[:labels].detect { |domain, label| host.include?(domain) }
-        pair[1] if pair
+        default = lambda { ["", "HTTP"] }
+        Samuel.config[:labels].detect(default) { |domain, label|
+          host.include?(domain)
+        }[1]
       end
 
       def response_summary

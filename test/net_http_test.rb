@@ -215,6 +215,15 @@ class RequestTest < Test::Unit::TestCase
       should_log_including "Example API request"
     end
 
+    context "with a global config including :labels => {'example.org' => 'Example API'} but making a request to example.com" do
+      setup do
+        FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
+        Samuel.config[:labels] = {'example.org' => 'Example API'}
+        open "http://example.com/test"
+      end
+
+      should_log_including "HTTP request"
+    end
   end
 
 end
