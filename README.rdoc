@@ -59,7 +59,7 @@ Right now, there are three configuration changes you can make in either style:
   labels as values. If a request domain includes one of the domain substrings,
   the corresponding label will be used for the first part of that log entry.
   By default this is empty, so that all requests are labeled with a default of
-   <tt>"HTTP Request"</tt>.
+  <tt>"HTTP Request"</tt>.
 
 * <tt>:label</tt> -- As an alternative to the <tt>:labels</tt> hash, this is
   simply a string. If set, it takes precedence over any <tt>:labels</tt> (by
