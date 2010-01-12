@@ -1,6 +1,14 @@
 require 'rubygems'
 require 'rake'
 
+require 'rake/testtask'
+Rake::TestTask.new(:test) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/*_test.rb'
+  test.verbose = false
+  test.warning = true
+end
+
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
@@ -17,16 +25,10 @@ begin
     gem.add_development_dependency "httpclient"
     gem.add_development_dependency "fakeweb"
   end
+
+  task :test => :check_dependencies
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
-end
-
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/*_test.rb'
-  test.verbose = false
-  test.warning = true
 end
 
 begin
@@ -44,8 +46,6 @@ rescue LoadError
     abort "RCov is not available. In order to run rcov, you must: gem install rcov"
   end
 end
-
-task :test => :check_dependencies
 
 task :default => :test
 
