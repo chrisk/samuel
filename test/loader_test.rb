@@ -26,8 +26,8 @@ class LoaderTest < Test::Unit::TestCase
       end
 
       should "not load HTTPClient" do
-        output = capture_output "puts defined?(HTTPClient)"
-        assert_equal "nil", output.strip
+        output = capture_output "puts 'good' unless defined?(HTTPClient)"
+        assert_equal "good", output.strip
       end
     end
 
@@ -40,8 +40,8 @@ class LoaderTest < Test::Unit::TestCase
       end
 
       should "not load HTTPClient" do
-        output = capture_output "puts defined?(HTTPClient)"
-        assert_match "nil", output.strip
+        output = capture_output "puts 'good' unless defined?(HTTPClient)"
+        assert_match "good", output.strip
       end
     end
 
@@ -54,8 +54,8 @@ class LoaderTest < Test::Unit::TestCase
       end
 
       should "not load Net::HTTP" do
-        output = capture_output "puts defined?(Net::HTTP)"
-        assert_match "nil", output.strip
+        output = capture_output "puts 'good' unless defined?(Net::HTTP)"
+        assert_match "good", output.strip
       end
     end
   end
