@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class RequestTest < Test::Unit::TestCase
-
   context "making an HTTP request" do
     setup    { setup_test_logger
                FakeWeb.clean_registry
@@ -221,5 +220,4 @@ class RequestTest < Test::Unit::TestCase
       should_log_including "HTTP request"
     end
   end
-
 end

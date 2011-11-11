@@ -28,6 +28,5 @@ module Samuel
       log_entry = log_entry_class.new(http, request, response, time_started, time_ended)
       log_entry.log!
     end
-
   end
 end

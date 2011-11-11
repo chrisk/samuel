@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class ThreadTest < Test::Unit::TestCase
-
   context "when logging multiple requests at once" do
     setup do
       @log = StringIO.new
@@ -28,5 +27,4 @@ class ThreadTest < Test::Unit::TestCase
       end
     end
   end
-
 end

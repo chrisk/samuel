@@ -1,6 +1,5 @@
 module Samuel
   module LogEntries
-
     class HttpClient < Base
       extend Forwardable
 
@@ -23,6 +22,5 @@ module Samuel
         @response.is_a?(Exception) || @response.status.to_s =~ /^(4|5)/
       end
     end
-
   end
 end

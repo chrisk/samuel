@@ -4,10 +4,8 @@ Bundler.setup
 
 require 'shoulda'
 require 'mocha'
-
 require 'net/http'
 require 'httpclient'
-
 require 'open-uri'
 require 'fakeweb'
 require 'webrick'

@@ -76,8 +76,8 @@ Right now, there are three configuration changes you can make in either style:
   these patterns as a substring by replacing the value with
   <tt>[FILTERED]</tt> in your logs. By default, no filtering is enabled.
 
-Samuel logs successful HTTP requests at the +INFO+ level; Failed requests log at
-the +WARN+ level. This isn't currently configurable, but it's on the list.
+Samuel logs successful HTTP requests at the +INFO+ level; Failed requests log
+at the +WARN+ level. This isn't currently configurable, but it's on the list.
 
 == License
 

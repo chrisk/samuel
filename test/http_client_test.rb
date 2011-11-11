@@ -94,5 +94,4 @@ class HttpClientTest < Test::Unit::TestCase
       should_log_including "[500 Internal Server Error]"
     end
   end
-
 end

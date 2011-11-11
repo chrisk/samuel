@@ -14,6 +14,5 @@ module Samuel
         apply_driver_patches
       end
     end
-
   end
 end

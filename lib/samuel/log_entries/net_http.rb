@@ -1,6 +1,5 @@
 module Samuel
   module LogEntries
-
     class NetHttp < Base
       def host
         @http.address
@@ -40,6 +39,5 @@ module Samuel
         (error_classes & response_ancestors).any?
       end
     end
-  
   end
 end

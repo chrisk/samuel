@@ -1,6 +1,5 @@
 module Samuel
   module DriverPatches
-
     module HTTPClient
       def self.included(klass)
         methods_to_wrap = %w(initialize do_get_block do_get_stream)
@@ -48,7 +47,5 @@ module Samuel
         end
       end
     end
-
   end
 end
-

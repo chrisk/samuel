@@ -1,13 +1,10 @@
 require 'test_helper'
 
 class SamuelTest < Test::Unit::TestCase
-
   context "logger configuration" do
     setup do
       Samuel.logger = nil
-      if Object.const_defined?(:RAILS_DEFAULT_LOGGER)
-        Object.send(:remove_const, :RAILS_DEFAULT_LOGGER)
-      end
+      Object.send(:remove_const, :Rails) if Object.const_defined?(:Rails)
     end
 
     teardown do
@@ -30,7 +27,6 @@ class SamuelTest < Test::Unit::TestCase
     end
   end
 
-
   context ".reset_config" do
     should "reset the config to default vaules" do
       Samuel.config = {:foo => "bar"}
@@ -38,5 +34,4 @@ class SamuelTest < Test::Unit::TestCase
       assert_equal({:label => nil, :labels => {}, :filtered_params => []}, Samuel.config)
     end
   end
-
 end

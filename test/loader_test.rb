@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class LoaderTest < Test::Unit::TestCase
-
   def capture_output(code = "")
     requires = @requires.map { |lib| "require '#{lib}';" }.join(' ')
     samuel_dir = "#{File.dirname(__FILE__)}/../lib"
@@ -59,5 +58,4 @@ class LoaderTest < Test::Unit::TestCase
       end
     end
   end
-
 end

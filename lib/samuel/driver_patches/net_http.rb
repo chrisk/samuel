@@ -1,6 +1,5 @@
 module Samuel
   module DriverPatches
-
     module NetHTTP
       def self.included(klass)
         methods_to_wrap = %w(request connect)
@@ -38,6 +37,5 @@ module Samuel
         raise
       end
     end
-
   end
 end

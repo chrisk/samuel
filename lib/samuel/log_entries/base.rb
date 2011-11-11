@@ -1,6 +1,5 @@
 module Samuel
   module LogEntries
-
     class Base
       def initialize(http, request, response, time_requested, time_responded)
         @http, @request, @response = http, request, response
@@ -11,8 +10,7 @@ module Samuel
         Samuel.logger.add(log_level, log_message)
       end
 
-
-      protected
+    protected
 
       def log_message
         bold      = "\e[1m"
@@ -73,6 +71,5 @@ module Samuel
         end
       end
     end
-
   end
 end
