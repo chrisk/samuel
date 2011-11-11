@@ -11,14 +11,16 @@ module Samuel
       end
 
       def request_with_samuel(request, body = nil, &block)
-        Samuel::Diary.record_request(self, request)
-
         response, exception_raised = nil, false
+        request_time = Samuel::Diary.current_time
+
         begin
           response = request_without_samuel(request, body, &block)
         rescue Exception => response
           exception_raised = true
         end
+
+        Samuel::Diary.record_request(self, request, request_time)
         Samuel::Diary.record_response(self, request, response)
 
         raise response if exception_raised
