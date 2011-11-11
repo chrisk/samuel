@@ -21,13 +21,10 @@ module Samuel
     @logger = nil if !defined?(@logger)
     return @logger if !@logger.nil?
 
-    @logger = case
-      when defined?(Rails) && Rails.respond_to?('logger')
-        Rails.logger
-      when defined?(RAILS_DEFAULT_LOGGER)
-        RAILS_DEFAULT_LOGGER
-      else
-        Logger.new(STDOUT)
+    if defined?(Rails) && Rails.respond_to?(:logger)
+      @logger = Rails.logger
+    else
+      @logger = Logger.new(STDOUT)
     end
   end
 

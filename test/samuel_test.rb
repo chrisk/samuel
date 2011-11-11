@@ -15,7 +15,7 @@ class SamuelTest < Test::Unit::TestCase
     end
 
     context "when Rails's logger is available" do
-      setup { Object.const_set(:RAILS_DEFAULT_LOGGER, :mock_logger) }
+      setup { Object.const_set(:Rails, stub(:logger => :mock_logger)) }
 
       should "use the same logger" do
         assert_equal :mock_logger, Samuel.logger
