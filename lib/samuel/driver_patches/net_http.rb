@@ -11,7 +11,7 @@ module Samuel
       end
 
       def request_with_samuel(request, body = nil, &block)
-        Samuel::Diary.record_request(self, request, Time.now)
+        Samuel::Diary.record_request(self, request)
 
         response, exception_raised = nil, false
         begin
@@ -19,8 +19,7 @@ module Samuel
         rescue Exception => response
           exception_raised = true
         end
-
-        Samuel::Diary.record_response(self, request, response, Time.now)
+        Samuel::Diary.record_response(self, request, response)
 
         raise response if exception_raised
         response
@@ -32,8 +31,8 @@ module Samuel
         fake_request = Object.new
         def fake_request.path; ""; end
         def fake_request.method; "CONNECT"; end
-        Samuel::Diary.record_request(self, fake_request, Time.now)
-        Samuel::Diary.record_response(self, fake_request, response, Time.now)
+        Samuel::Diary.record_request(self, fake_request)
+        Samuel::Diary.record_response(self, fake_request, response)
         raise
       end
     end

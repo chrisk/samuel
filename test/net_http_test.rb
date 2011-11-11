@@ -12,7 +12,7 @@ class RequestTest < Test::Unit::TestCase
       setup do
         FakeWeb.register_uri(:get, "http://example.com/test", :status => [200, "OK"])
         now = Time.now
-        Time.stubs(:now).returns(now, now + 0.053)
+        Samuel::Diary.stubs(:current_time).returns(now, now + 0.053)
         open "http://example.com/test"
       end
 

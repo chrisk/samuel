@@ -10,7 +10,7 @@ class HttpClientTest < Test::Unit::TestCase
     context "to GET http://localhost:8000/, responding with a 200 in 53ms" do
       setup do
         now = Time.now
-        Time.stubs(:now).returns(now, now + 0.053)
+        Samuel::Diary.stubs(:current_time).returns(now, now + 0.053)
         HTTPClient.get("http://localhost:8000/")
       end
 
