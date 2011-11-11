@@ -12,13 +12,12 @@ automatically loading the correct logger for the HTTP client you're using.
 
 == Usage
 
-When Rails is loaded, Samuel configures a few things automatically. So all you
-need to do is this:
+If you're using Bundler, just add this to your Gemfile:
 
-  # config/environment.rb
-  config.gem "samuel"
+  gem "samuel", "~> 0.3"
 
-And Samuel will automatically use Rails's logger and an ActiveRecord-like format.
+When Rails is loaded, Samuel configures itself to use Rails's logger and an
+ActiveRecord-like format automatically, so you don't need to do anything else.
 
 For non-Rails projects, you'll have to manually configure logging, like this:
 
