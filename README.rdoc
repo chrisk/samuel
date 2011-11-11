@@ -80,4 +80,4 @@ at the +WARN+ level. This isn't currently configurable, but it's on the list.
 
 == License
 
-Copyright 2009–2010 Chris Kampmeier. See +LICENSE+ for details.
+Copyright 2009–2011 Chris Kampmeier. See +LICENSE+ for details.
