@@ -63,6 +63,7 @@ class HttpClientTest < Test::Unit::TestCase
           client = HTTPClient.new
           connection = client.get_async("http://localhost:8001/")
           sleep 0.1 until connection.finished?
+          connection.pop
         rescue Errno::ECONNREFUSED => @exception
         end
       end
