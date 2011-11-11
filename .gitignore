@@ -1,5 +1,6 @@
 .DS_Store
 .yardoc
+Gemfile.lock
 /coverage
 /doc
 /pkg
