@@ -47,6 +47,7 @@ class Test::Unit::TestCase
 
   def self.should_raise_exception(klass)
     should "raise an #{klass} exception" do
+      @exception = nil if !defined?(@exception)
       assert @exception.is_a?(klass)
     end
   end
